@@ -19,14 +19,10 @@ if (Get-Module -ListAvailable -Name "AzureAD") {
 # Connect to Azure with a Prompt
 Connect-AzureAD
 
-# Collect license info
+# License info
 $PBILicenses = Get-AzureADSubscribedSku | Where-Object{$_.SkuPartNumber -like '*POWER_BI*' -and $_.CapabilityStatus -eq 'Enabled'} | Select-Object SkuPartNumber, ConsumedUnits, SkuId
 
-# Return global license count
-# $PBILicenses | Select-Object SkuPartNumber, ConsumedUnits, SkuId
-
 $PBIUsers = @()
-# Loop through each license and list all users
 foreach($license in $PBILicenses) {
     $PBIUsers += Get-AzureADUser -All $True | Where-Object{($_.AssignedLicenses | Where-Object{$_.SkuId -eq $license.SkuId})} | Select-Object DisplayName, UserPrincipalName, @{l='License';e={$license.SkuPartNumber}}
 }

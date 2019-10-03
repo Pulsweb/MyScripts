@@ -37,7 +37,7 @@ $headers = @{
     "X-PowerBI-User-Admin" = $true
 }
 
-$FileName = "$folderFullPath\RefreshHistory.csv"
+$FileName = "$folderFullPath\PowerBI-RefreshHistory.csv"
 if (Test-Path $FileName) {
     Remove-Item $FileName
 }
