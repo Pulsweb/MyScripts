@@ -1,12 +1,11 @@
 # Romain Casteres - https://www.pulsweb.fr
 
-# The output folder to put all the extracts in
+# The output folder to put all the extracts
 $folder = "out"
 $folderFullPath = "$PSScriptRoot\$folder"
 
-If(!(test-path $folderFullPath))
-{
-      New-Item -ItemType Directory -Force -Path $folderFullPath
+If(!(test-path $folderFullPath)){
+    New-Item -ItemType Directory -Force -Path $folderFullPath
 }
 
 # Installing Connect-AzureAD if not present
