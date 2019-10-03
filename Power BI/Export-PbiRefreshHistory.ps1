@@ -46,7 +46,7 @@ $workspaces = Get-PowerBIWorkspace
 
 foreach($workspaces in $workspaces){
     
-    Write-Host "> Returning workspace: $($workspaces.Name)"
+    Write-Host "> Workspace: $($workspaces.Name)"
     
     $datasets = Get-PowerBIDataset -WorkspaceId $workspaces.Id
 
@@ -54,10 +54,9 @@ foreach($workspaces in $workspaces){
 
     foreach($dataset in $datasets){
 
-        # We can only return refresh info on datasets that can be refreshed
         if($dataset.IsRefreshable -eq "True") {
 
-            Write-Host ">> Returning refresh history for dataset: $($dataset.name)"
+            Write-Host ">> Dataset: $($dataset.name)"
 
             $uri = "https://api.powerbi.com/v1.0/myorg/groups/$($workspaces.Id)/datasets/$($dataset.id)/refreshes/?`$top=$($TopN)"
                                
