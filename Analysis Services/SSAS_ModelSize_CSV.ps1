@@ -1,4 +1,5 @@
 ﻿# Romain Casteres - Analyzing PBIRS Tabular Model Size
+# AMO Required (SSAS Feature Pack)
 # SSAS Instance for PBIRS : "localhost:5132"
 # Export to CSV
 
