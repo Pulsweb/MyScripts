@@ -14,7 +14,7 @@ SELECT
 	HIST.Message,
 	CASE
 		WHEN HIST.Status = 0 THEN 'Data refresh finished sucessfully'
-		WHEN HIST.Status = 0 THEN 'Data refresh is in progress'
+		WHEN HIST.Status = 1 THEN 'Data refresh is in progress'
 		ELSE 'Error during refresh'
 	END AS RESULT
 FROM 
