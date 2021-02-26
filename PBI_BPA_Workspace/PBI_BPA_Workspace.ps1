@@ -53,7 +53,7 @@ function Invoke-NativeApplication {
 }
 
 # Connection
-#Connect-PowerBIServiceAccount 
+Connect-PowerBIServiceAccount 
 
 # BPA for every Datasets within the Workspace 
 $workspaces = Get-PowerBIWorkspace -Name $PremiumWokspaceNameToBeAnalyzed
