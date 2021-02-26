@@ -14,7 +14,7 @@ $WithServicePrincipal = "False" # True or False
     $PowerBIServicePrincipalSecret = "###"
 $OutputDirectory = "C:\temp\"
 $TabularEditorPortableExePath = "C:\Program Files (x86)\Tabular Editor\TabularEditor.exe"
-$PremiumWokspaceNameToBeAnalyzed = "###"
+$PremiumWokspaceNameToBeAnalyzed = "###" #PREMIUM REQUIRED
 $TabularEditorBPARulesPath = "https://raw.githubusercontent.com/microsoft/Analysis-Services/master/BestPracticeRules/BPARules.json"
 $biglistofdatasets = [System.Collections.ArrayList]::new()
 $CurrentDateTime = (Get-Date).tostring("yyyyMMdd-HHmmss")
@@ -57,11 +57,11 @@ function Invoke-NativeApplication {
 }
 
 # Connection
-IF ($WithServicePrincipal -eq "true") {
+IF ($WithServicePrincipal -eq "True") {
     Write-Host "Connecting with Service Principal..."
     $secureServicePrincipalSecretBis = $PowerBIServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force
-    $Cred = New-Object PSCredential -ArgumentList $PowerBIServicePrincipalClientId, $secureServicePrincipalSecretBis 
-    Connect-PowerBIServiceAccount -ServicePrincipal -Credential $Cred -Tenant $PowerBIServicePrincipalTenantId
+    $credential = New-Object PSCredential -ArgumentList $PowerBIServicePrincipalClientId, $secureServicePrincipalSecretBis 
+    Connect-PowerBIServiceAccount -ServicePrincipal -Credential $credential -Tenant $PowerBIServicePrincipalTenantId 
 } ELSE {
     Write-Host "Connecting with User..."
     Connect-PowerBIServiceAccount 
@@ -88,8 +88,7 @@ if ($workspaces) {
                 $DatasetTRXOutputPath = Join-Path -Path $DatasetTRXOutputDir -ChildPath "\$workspaceName - $datasetName.trx"
                 Write-Host "--- Performing Best Practice Analyzer on dataset: $datasetName."
                 Write-Host "--- Output saved: $DatasetTRXOutputPath."
-                
-                IF ($WithServicePrincipal -eq "true") {
+                IF ($WithServicePrincipal -eq "True") {
                     Invoke-NativeApplication { cmd /c """$TabularEditorPortableExePath"" ""Provider=MSOLAP;Data Source=powerbi://api.powerbi.com/v1.0/myorg/$workspaceName;User ID=app:$PowerBIServicePrincipalClientId@$PowerBIServicePrincipalTenantId;Password=$($credential.getNetworkCredential().password)"" ""$datasetName"" -A ""$TabularEditorBPARulesPath"" -TRX ""$DatasetTRXOutputPath""" } @(0, 1) $True #| Out-Null
                 } ELSE {
                     Invoke-NativeApplication { cmd /c """$TabularEditorPortableExePath"" ""Provider=MSOLAP;Data Source=powerbi://api.powerbi.com/v1.0/myorg/$workspaceName;Integrated Security=SSPI;"" ""$datasetName"" -A ""$TabularEditorBPARulesPath"" -TRX ""$DatasetTRXOutputPath""" } @(0, 1) $True #| Out-Null
