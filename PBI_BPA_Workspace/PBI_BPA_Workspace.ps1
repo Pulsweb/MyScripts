@@ -11,13 +11,15 @@
 $OutputDirectory = "C:\temp\"
 $TabularEditorPortableExePath = "C:\Program Files (x86)\Tabular Editor\TabularEditor.exe"
 $PremiumWokspaceNameToBeAnalyzed = "RCA_PremPerUser" #PREMIUM REQUIRED
+$TabularEditorBPARulesPath = "https://raw.githubusercontent.com/microsoft/Analysis-Services/master/BestPracticeRules/BPARules.json"
 $biglistofdatasets = [System.Collections.ArrayList]::new()
 $CurrentDateTime = (Get-Date).tostring("yyyyMMdd-HHmmss")
 $OutputDir = Join-Path -Path $OutputDirectory -ChildPath "\$CurrentDateTime"
 new-item $OutputDir -itemtype directory -Force | Out-Null
 
 # Download BPA Rules
-wget "https://raw.githubusercontent.com/microsoft/Analysis-Services/master/BestPracticeRules/BPARules.json" -outfile $OutputDir"\Rules.json"
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+wget $TabularEditorBPARulesPath -outfile $OutputDir"\Rules.json"
 
 # Runctions to call the .exe - Author: https://mnaoumov.wordpress.com/
 function Test-CalledFromPrompt {
@@ -51,7 +53,7 @@ function Invoke-NativeApplication {
 }
 
 # Connection
-Connect-PowerBIServiceAccount 
+#Connect-PowerBIServiceAccount 
 
 # BPA for every Datasets within the Workspace 
 $workspaces = Get-PowerBIWorkspace -Name $PremiumWokspaceNameToBeAnalyzed
