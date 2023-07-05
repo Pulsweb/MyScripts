@@ -1,5 +1,5 @@
 Romain Casteres
 
-Cloud Solution Architect at Microsoft - Data & AI
+Cloud Solution Architect @ Microsoft | Unlocking Customer Data Value
 
 Blogger at https://www.pulsweb.fr/
